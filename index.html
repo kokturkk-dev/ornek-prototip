@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reçetra · Vitrinova · Kökpas – Örnek Prototip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,sans-serif;color:#16211C;background:#F4F5F2}
+h1,h2,h3{margin:0}
+.disp{font-family:'Space Grotesk',Inter,sans-serif}
+button{font-family:inherit}
+.top{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #DDE2DE}
+.top-in{max-width:1280px;margin:0 auto;padding:10px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.brand{font-weight:700;margin-right:12px}
+.navlink{border:1px solid #C9D1CC;background:#fff;border-radius:999px;padding:9px 14px;font-size:14px;font-weight:500;cursor:pointer;min-height:40px;color:#16211C}
+.navlink[aria-current="page"]{background:#16211C;color:#fff;border-color:#16211C}
+.wrap{max-width:1280px;margin:0 auto;padding:28px 24px 48px}
+.hdr{color:#fff;padding:16px 24px}
+.hdr-in{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-mark{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Space Grotesk',sans-serif;font-size:18px;color:#fff}
+.tabs{background:#fff;border-bottom:1px solid #DDE2DE}
+.tabs-in{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;flex-wrap:wrap;gap:4px}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:14px 10px;font-size:15px;font-weight:500;color:#56625B;cursor:pointer;min-height:48px}
+.tab[aria-current="page"]{font-weight:600;color:#16211C;border-bottom-color:var(--acc)}
+.card{background:#fff;border:1px solid #DDE2DE;border-radius:12px;padding:24px}
+.row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.main{flex:999 1 560px;min-width:0}
+.side{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.stack{display:flex;flex-direction:column;gap:16px}
+.muted{color:#56625B}
+.small{font-size:13px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{background:#fff;color:#16211C;border:1px solid #C9D1CC;border-radius:999px;padding:9px 15px;font-size:14px;font-weight:500;cursor:pointer;min-height:44px}
+.pill[aria-pressed="true"]{background:var(--acc);color:#fff;border-color:var(--acc)}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:12px 18px;font-size:15px;font-weight:600;cursor:pointer;min-height:44px}
+.btn.ghost{background:#fff;color:#16211C;border:1px solid #C9D1CC}
+.kpis{display:flex;flex-wrap:wrap;gap:16px}
+.kpi{flex:1 1 200px;background:#fff;border:1px solid #DDE2DE;border-radius:12px;padding:18px}
+.kpi b{display:block;font-family:'Space Grotesk',sans-serif;font-size:28px;margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.chip{display:inline-block;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+.ok{background:#E3F1EC;color:#0A4E43}.warn{background:#FFF3EA;color:#7A330B}.miss{background:#FBEBEB;color:#8A2A2A}.plan{background:#ECECFA;color:#2A2D80}.gray{background:#EEF1EE;color:#2C3A33}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:720px}
+th{text-align:left;color:#56625B;font-weight:600;padding:10px 12px;border-bottom:1px solid #DDE2DE}
+td{padding:12px;border-bottom:1px solid #EEF1EE}
+.sel{border:2px solid var(--acc)!important}
+.bar{display:block;background:#EEEFEC;border-radius:999px;height:10px}
+.bar>span{display:block;height:100%;border-radius:999px;background:var(--acc)}
+.note{font-size:12px;color:#5B6660;margin-top:20px}
+.pre{white-space:pre-line;line-height:1.6}
+.choice{text-align:left;width:100%;display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #DDE2DE;border-radius:12px;padding:15px;cursor:pointer;color:inherit;font-size:14px}
+.stage-card{position:relative;background:#fff;border:1px solid #DDE2DE;border-radius:12px;padding:18px}
+.chain{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.prod{display:flex;flex-direction:column;gap:10px;background:#fff;border-radius:14px;padding:20px;text-align:left;cursor:pointer;color:inherit;font-size:14px;line-height:1.55}
+@media (max-width:860px){.chain{grid-template-columns:1fr}.arrow{display:none}}
+</style>
+</head>
+<body>
+<div class="top"><div class="top-in" id="topnav"></div></div>
+<div id="app"></div>
+<script>
+(function(){
+var S={view:'genel',
+ r:{tab:0,cat:'Cips ve atıştırmalık',goal:'Tuz azaltma',pct:30,country:'Suudi Arabistan',picked:{a:true,c:true,e:true},sent:true},
+ v:{tab:0,sel:'b1',status:{b1:'new',b2:'new',b3:'sent',b4:'question'},q:0,lang:'TR'},
+ k:{tab:0,done:{},filter:'Tümü',shared:{r1:false,r2:true,r3:false}}};
+var VIEWS=[['genel','Genel bakış'],['recetra','A · Reçetra'],['vitrinova','B · Vitrinova'],['kokpas','C · Kökpas']];
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function pills(list,cur,act){return '<div class="pills">'+list.map(function(v){return '<button type="button" class="pill" aria-pressed="'+(v===cur)+'" data-a="'+act+'" data-v="'+esc(v)+'">'+esc(v)+'</button>'}).join('')+'</div>'}
+function tabs(names,cur,act){return '<nav class="tabs" aria-label="Ekranlar"><div class="tabs-in">'+names.map(function(n,i){return '<button type="button" class="tab" aria-current="'+(i===cur?'page':'false')+'" data-a="'+act+'" data-v="'+i+'">'+esc(n)+'</button>'}).join('')+'</div></nav>'}
+function header(bg,mark,markBg,name,tag,user){return '<header class="hdr" style="background:'+bg+'"><div class="hdr-in"><div class="logo"><div class="logo-mark" style="background:'+markBg+'">'+mark+'</div><div><div class="disp" style="font-weight:700;font-size:20px">'+name+'</div><div style="font-size:12px;opacity:.8">'+tag+'</div></div></div><div style="font-size:14px;opacity:.85">'+user+'</div></div></header>'}
+function kpis(list){return '<div class="kpis">'+list.map(function(k){return '<div class="kpi"><span class="small muted">'+k[0]+'</span><b>'+k[1]+'</b>'+(k[2]?'<span class="small muted">'+k[2]+'</span>':'')+'</div>'}).join('')+'</div>'}
+function table(head,rows,minw){return '<div class="tbl"><table'+(minw?' style="min-width:'+minw+'px"':'')+'><thead><tr>'+head.map(function(h){return '<th>'+h+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+c+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
+function chip(cls,t){return '<span class="chip '+cls+'">'+t+'</span>'}
+
+/* ---------- GENEL BAKIŞ ---------- */
+function genel(){
+ var arrow='<svg class="arrow" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7A857F" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;right:-26px;top:38px"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>';
+ var st=[['1. HALKA','Hammadde üreticisi','Fındık, baharat, kakao ürünleri, süt tozu',1],['2. HALKA','Bileşen firması','Aroma evleri, tat şirketleri, distribütörler (Kerry burada)',1],['3. HALKA','Gıda üreticisi','Cips, bisküvi, süt ürünü, içecek fabrikaları',1],['4. HALKA','Market ve tüketici','Türkiye, Körfez, Irak, AB rafları',0]];
+ var pr=[['kokpas','C','Kökpas','#8A4B0F','Tedarikçi uyum pasaportu','Çok uluslulara hammadde satan ihracatçı KOBİ\'ler.','Her büyük alıcı ayrı belge, denetim, köken ve karbon verisi istiyor; EUDR 30 Aralık 2026\'da başlıyor.','Bir kez doldurulan dijital pasaport, hazırlık skoru, belge kasası, köken kaydı, anketlere otomatik taslak.','Firma başı yıllık abonelik; birlikler üzerinden toplu lisans.','Yeşilyaka Gıda (Ordu)'],
+  ['vitrinova','B','Vitrinova','#3B3FA8','Bileşen firması için dijital satış vitrini','Yerli aroma evleri, baharat-ekstrakt üreticileri, distribütörler.','Katalog, teknik föy ve numune süreci e-posta ve WhatsApp\'ta; Arapça-İngilizce dijital varlık zayıf.','Reçetra\'dan gelen talepleri toplar, katalog ve çok dilli teknik asistan sunar, numuneden siparişe huniyi izler.','Tedarikçi başı yıllık abonelik + nitelikli talep başı ücret.','Mavi Defne Aroma (İstanbul)'],
+  ['recetra','A','Reçetra','#0F6B5C','Tedarikçiden bağımsız reformülasyon platformu','Orta ölçekli gıda üreticilerinin Ar-Ge ve ürün ekipleri.','Tuz-şeker azaltma ve ihracat uyarlaması aylar sürüyor; her tedarikçiyle ayrı yazışma.','Pazar kurallı brief, tek tıkla çok tedarikçiye gönderim, numune karşılaştırma, etiket çıktısı.','Kullanıcı başı aylık abonelik.','Çıtırca Gıda (Gaziantep)']];
+ var h='<main class="wrap stack" style="gap:32px">';
+ h+='<div><div class="small muted" style="font-weight:600;letter-spacing:.08em">GENEL BAKIŞ</div><h1 class="disp" style="font-size:42px;margin:8px 0">Üç ürün, tek değer zinciri</h1><p style="font-size:17px;line-height:1.6;max-width:820px;color:#3E4A43;margin:0">Her ürün zincirin farklı bir halkasına satılır. Hiçbiri Kerry\'nin kendisine satılmaz; Kerry ve benzerleri zincirin ortasındaki bileşen firmalarıdır.</p></div>';
+ h+='<div class="chain">'+st.map(function(s,i){return '<div class="stage-card" style="'+(i===3?'background:#E9ECE9;border-style:dashed':'')+'"><div class="small muted" style="font-weight:600">'+s[0]+'</div><div style="font-weight:700;font-size:18px;margin-top:4px">'+s[1]+'</div><div class="muted" style="font-size:14px;margin-top:6px">'+s[2]+'</div>'+(s[3]?arrow:'')+'</div>'}).join('');
+ h+=pr.map(function(p){return '<button type="button" class="prod" data-a="go" data-v="'+p[0]+'" style="border:2px solid '+p[3]+'"><span style="display:flex;align-items:center;gap:10px"><span class="logo-mark" style="width:34px;height:34px;font-size:16px;background:'+p[3]+'">'+p[1]+'</span><span class="disp" style="font-weight:700;font-size:24px">'+p[2]+'</span></span><span style="font-weight:600;color:'+p[3]+'">'+p[4]+'</span><span><b>Alıcı:</b> '+p[5]+'</span><span><b>Sorun:</b> '+p[6]+'</span><span><b>Ne yapar:</b> '+p[7]+'</span><span><b>Gelir:</b> '+p[8]+'</span><span class="small muted">Örnek firma: '+p[9]+' · ekranları aç →</span></button>'}).join('');
+ h+='<div style="border:1px dashed #B9C2BC;border-radius:14px;padding:20px;font-size:14px;line-height:1.55;color:#3E4A43">Bu halkaya ürün yok. Tüketici, daha sağlıklı ve doğru etiketli ürün olarak faydayı dolaylı görür.</div></div>';
+ h+='<div class="row"><div class="card" style="flex:1 1 520px"><h2 style="font-size:18px;margin-bottom:12px">Ürünler birbirini nasıl besler</h2><ol style="margin:0;padding-left:20px;line-height:1.6;display:flex;flex-direction:column;gap:8px"><li>Çıtırca Gıda, <b>Reçetra</b>\'da "acılı cipste %30 tuz azaltma, Suudi pazarı" brief\'i açar.</li><li>Brief, <b>Vitrinova</b> kullanan Mavi Defne Aroma\'nın gelen kutusuna düşer; Mavi Defne numune gönderir.</li><li>Mavi Defne\'nin büyük müşterileri hammaddenin kökenini sorar; Mavi Defne de hammaddeyi <b>Kökpas</b> pasaportu olan üreticilerden almayı tercih eder.</li></ol></div><div class="card" style="flex:1 1 380px"><h2 style="font-size:18px;margin-bottom:12px">Önerilen sıra</h2><ol style="margin:0;padding-left:20px;line-height:1.6;display:flex;flex-direction:column;gap:8px"><li><b>0–6. ay:</b> Pazar giriş danışmanlığı ile nakit ve ilişki.</li><li><b>6–18. ay:</b> Reçetra ve Vitrinova birlikte pilot.</li><li><b>18. ay sonrası:</b> Kökpas ek modül olarak.</li></ol></div></div>';
+ h+='<p class="note">Marka ve firma adları uydurmadır; kullanmadan önce TÜRKPATENT ve alan adı kontrolü gerekir. Ekranlardaki tüm veriler örnektir.</p></main>';
+ return h;
+}
+
+/* ---------- REÇETRA ---------- */
+var RULES={'Türkiye':['Türk Gıda Kodeksi etiketleme kurallarına göre besin değeri tablosu','Karşılaştırmalı "azaltılmış" beyanı için referans ürüne göre en az %25 fark','Türkçe etiket ve üretici bilgileri','Alerjenler içerik listesinde vurgulanmalı'],
+ 'Suudi Arabistan':['GSO 2233 formatında besin değeri tablosu','Arapça etiket zorunlu','Tanınmış kuruluştan helal sertifikası','Ön yüz trafik ışığı etiketi şu an gönüllü; hazırlıklı olun'],
+ 'Irak':['Arapça etiket zorunlu','Helal sertifikası','İthalatta analiz sertifikası (COA) ve menşe belgesi','Raf ömrü etikette açıkça belirtilmeli'],
+ 'BAE':['GSO 2233 formatında besin değeri tablosu','Arapça ve İngilizce etiket','Tanınmış kuruluştan helal sertifikası','Katkı maddeleri E-kodlarıyla listelenmeli']};
+var SUP=[{id:'a',name:'Mavi Defne Aroma',type:'Aroma evi · İstanbul',tags:['Tuz azaltma sistemi','Helal','Arapça teknik föy'],lead:'9 gün',fit:{'Tuz azaltma':92,'Şeker azaltma':74,'Maliyet düşürme':81}},
+ {id:'b',name:'Ege Kekik Ekstrakt',type:'Baharat ve ekstrakt · İzmir',tags:['Doğal ekstrakt','Helal'],lead:'12 gün',fit:{'Tuz azaltma':78,'Şeker azaltma':61,'Maliyet düşürme':88}},
+ {id:'c',name:'Novatat Global',type:'Küresel tat şirketi · bölge ofisi',tags:['Tuz ve şeker azaltma','Helal','GSO belgeleri'],lead:'15 gün',fit:{'Tuz azaltma':89,'Şeker azaltma':90,'Maliyet düşürme':64}},
+ {id:'d',name:'Tatlıbaş Dağıtım',type:'Tatlandırıcı distribütörü · İstanbul',tags:['Stevia ve lif','Helal'],lead:'7 gün',fit:{'Tuz azaltma':40,'Şeker azaltma':86,'Maliyet düşürme':70}},
+ {id:'e',name:'Sahil Bileşen',type:'Bileşen üreticisi · Cidde',tags:['Yerel üretim','Arapça teknik föy'],lead:'10 gün',fit:{'Tuz azaltma':72,'Şeker azaltma':69,'Maliyet düşürme':83}}];
+function recetra(){
+ var r=S.r,h=header('#0B3B33','A','#1F9C86','Reçetra','Reformülasyonu aylardan haftalara indirin','Çıtırca Gıda · Ar-Ge');
+ h+=tabs(['1 Projeler','2 Brief','3 Tedarikçiler','4 Numuneler','5 Etiket'],r.tab,'rtab');
+ h+='<main class="wrap">';
+ var goalWord=r.goal.toLowerCase();
+ if(r.tab===0){
+  h+='<div class="stack">'+kpis([['Açık proje','3','1 tanesi bu hafta bitiyor'],['Bekleyen numune','4','3 tedarikçiden'],['Ortalama proje süresi','5,5 hafta','önceki yöntem: 4–6 ay (tahmin)'],['Bu yıl tamamlanan','7','2 ihracat pazarı']]);
+  var pj=[['Çıtırca Acılı – Körfez','Tuz −%30','Suudi Arabistan',chip('plan','Numune'),'3','12 Ara',3],['Çıtırca Kraker – Irak','Maliyet −%8','Irak',chip('warn','Brief'),'–','20 Ara',1],['Çıtırca Mini Kek','Şeker −%20','Türkiye',chip('ok','Etiket'),'2','28 Kas',4],['Çıtırca Peynirli Çubuk','Doğal aromaya geçiş','BAE',chip('gray','Tamamlandı'),'4','3 Kas',4]];
+  h+='<div class="card stack"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end"><div><h1 class="disp" style="font-size:28px">Projeler</h1><p class="muted" style="margin:6px 0 0">Tüm reformülasyon ve ihracat uyarlama projeleri tek listede.</p></div><button type="button" class="btn" data-a="rtab" data-v="1">+ Yeni proje</button></div>';
+  h+=table(['Proje','Hedef','Pazar','Aşama','Tedarikçi','Bitiş',''],pj.map(function(p){return ['<b>'+p[0]+'</b>',p[1],p[2],p[3],p[4],p[5],'<button type="button" class="btn ghost" style="padding:8px 14px;font-size:13px;min-height:40px" data-a="rtab" data-v="'+p[6]+'">Aç</button>']}))+'</div></div>';
+ }
+ if(r.tab===1){
+  var brief='Ürün: '+r.cat+'\nHedef: %'+r.pct+' '+goalWord+', mevcut acılık ve tat profili korunacak\nPazar: '+r.country+'\nKısıtlar: birim maliyet artışı en fazla %3, helal belge zorunlu, alerjen listesi değişmeyecek\nİstenen: 2 numune, teknik föy, analiz sertifikası (COA), 21 gün içinde\nYıllık hacim: yaklaşık 40 ton ürün';
+  var warn=r.pct<25&&r.goal!=='Maliyet düşürme';
+  h+='<div class="row"><section class="card main stack" style="gap:22px"><div><h1 class="disp" style="font-size:28px">Yeni proje: Acılı cips, Körfez versiyonu</h1><p class="muted" style="margin:6px 0 0">Hedefi seçin; brief, hedef pazarın kurallarıyla birlikte hazırlanır.</p></div>';
+  h+='<div><div style="font-weight:600;font-size:14px;margin-bottom:10px">Ürün kategorisi</div>'+pills(['Cips ve atıştırmalık','Ekmek ve fırın','Peynir ve süt ürünleri','Hazır içecek'],r.cat,'rcat')+'</div>';
+  h+='<div><div style="font-weight:600;font-size:14px;margin-bottom:10px">Hedef</div>'+pills(['Tuz azaltma','Şeker azaltma','Maliyet düşürme'],r.goal,'rgoal')+'</div>';
+  h+='<div><label for="pct" style="font-weight:600;font-size:14px;display:block;margin-bottom:10px">Hedef azalma: %'+r.pct+'</label><input id="pct" type="range" min="10" max="50" step="5" value="'+r.pct+'" style="width:100%;max-width:480px;accent-color:#0F6B5C"></div>';
+  h+='<div><div style="font-weight:600;font-size:14px;margin-bottom:10px">Satılacak pazar</div>'+pills(['Türkiye','Suudi Arabistan','Irak','BAE'],r.country,'rcountry')+'</div>';
+  h+='<div><button type="button" class="btn" data-a="rtab" data-v="2">Brief\'i onayla ve tedarikçi seç</button></div></section>';
+  h+='<aside class="side"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:12px"><h2 style="font-size:16px">Otomatik brief taslağı</h2>'+chip('ok','Yapay zekâ taslağı')+'</div><p class="pre" style="margin:0;font-size:15px">'+esc(brief)+'</p></div>';
+  h+='<div class="card"><h2 style="font-size:16px;margin-bottom:12px">'+r.country+' için kontrol listesi</h2><ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.5">'+RULES[r.country].map(function(t){return '<li style="display:flex;gap:10px"><span aria-hidden="true" style="color:#0F6B5C;font-weight:700">✓</span><span>'+t+'</span></li>'}).join('')+'</ul>';
+  if(warn)h+='<div style="margin-top:16px;background:#FFF3EA;border:1px solid #F1C6A6;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.5;color:#7A330B"><b>Uyarı:</b> %'+r.pct+' azalma ile ambalajda "azaltılmış '+(r.goal==='Tuz azaltma'?'tuz':'şeker')+'" beyanı yapılamayabilir. Pazarlama mesajı için hedefi %25 veya üstüne çıkarmayı düşünün.</div>';
+  h+='<p class="small muted" style="margin:16px 0 0">Örnek kurallar. Gerçek kural kütüphanesi uzman onayıyla kurulacak.</p></div></aside></div>';
+ }
+ if(r.tab===2){
+  var ranked=SUP.slice().sort(function(x,y){return y.fit[r.goal]-x.fit[r.goal]});
+  var n=SUP.filter(function(p){return r.picked[p.id]}).length;
+  h+='<section class="card stack"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end"><div><h1 class="disp" style="font-size:28px">Brief\'i kime gönderelim?</h1><p class="muted" style="margin:6px 0 0">Uyum skoru; portföy, hedef pazar belgeleri ve numune süresine göre hesaplanır. Reçetra hiçbir tedarikçiye bağlı değildir.</p></div><span class="muted">'+n+' tedarikçi seçildi</span></div><div class="grid">';
+  h+=ranked.map(function(p){var on=!!r.picked[p.id];return '<div class="card'+(on?' sel':'')+'" style="padding:18px;display:flex;flex-direction:column;gap:12px"><div style="display:flex;justify-content:space-between;gap:12px"><div><div style="font-weight:700;font-size:16px">'+p.name+'</div><div class="small muted">'+p.type+'</div></div><div style="text-align:right"><div class="disp" style="font-weight:700;font-size:22px;color:#0F6B5C">'+p.fit[r.goal]+'</div><div style="font-size:11px" class="muted">uyum skoru</div></div></div><div class="pills">'+p.tags.map(function(t){return '<span class="chip gray" style="font-weight:500">'+t+'</span>'}).join('')+'</div><div class="small muted">Ortalama numune süresi: '+p.lead+'</div><button type="button" class="'+(on?'btn':'btn ghost')+'" aria-pressed="'+on+'" data-a="rpick" data-v="'+p.id+'">'+(on?'Seçildi':'Seç')+'</button></div>'}).join('');
+  h+='</div><div class="pills"><button type="button" class="btn ghost" data-a="rtab" data-v="1">Brief\'e dön</button><button type="button" class="btn" data-a="rsend">Seçilenlere gönder ve numune iste</button></div></section>';
+ }
+ if(r.tab===3){
+  var order=['a','c','e','b','d'].filter(function(id){return r.picked[id]});
+  var res={a:['%33','+0,09 $','8,1','Tam'],c:['%31','+0,14 $','7,9','Tam'],e:['%27','+0,05 $','7,4','COA eksik'],b:['%24','−0,02 $','7,2','Tam'],d:['%18','+0,04 $','6,8','Helal eksik']};
+  var stl=[['ok','Panel testi tamam'],['plan','Numune geldi'],['warn','Yolda']];
+  var rows=r.sent?order.map(function(id,i){var st=Math.min(i,2),x=res[id],nm=SUP.filter(function(s){return s.id===id})[0].name;return ['<b>'+nm+'</b>'+(i===0?' '+chip('ok','Önde'):''),'<code>NS-26-'+(114+i)+'</code>',chip(stl[st][0],stl[st][1]),st<2?x[0]:'Bekleniyor',st<2?x[1]:'Bekleniyor',st===0?x[2]:'Bekleniyor',x[3]]}):[];
+  h+='<div class="stack">'+kpis([['Gönderilen brief',r.sent?String(order.length):'0'],['Gelen numune',r.sent?String(Math.min(order.length,2)):'0'],['Hedef tarihe kalan','21 gün']]);
+  h+='<div class="card stack"><div><h1 class="disp" style="font-size:28px">Numune karşılaştırma</h1><p class="muted" style="margin:6px 0 0">'+r.cat+' · %'+r.pct+' '+goalWord+' · '+r.country+' · tüm numuneler aynı ölçütlerle.</p></div>';
+  h+=rows.length?table(['Tedarikçi','Numune','Durum','Ulaşılan azalma','Maliyet etkisi (kg)','Duyusal panel (10)','Belgeler'],rows,860):'<p style="margin:0;padding:16px;background:#F4F5F2;border-radius:8px">Henüz brief gönderilmedi. Önce "Tedarikçiler" ekranında seçim yapın.</p>';
+  h+='<div class="pills"><button type="button" class="btn ghost" data-a="rtab" data-v="2">Tedarikçilere dön</button><button type="button" class="btn" style="background:#0B3B33" data-a="rtab" data-v="4">Kazananı seç ve etikete geç</button></div></div></div>';
+ }
+ if(r.tab===4){
+  var nut=[['Enerji','536 kcal','536 kcal','–'],['Yağ','33 g','33 g','–'],['Karbonhidrat','52 g','52 g','–'],['Şeker','1,2 g','1,2 g','–'],['Protein','6,0 g','6,0 g','–'],['<b>Tuz</b>','1,60 g','<b>1,07 g</b>','<b>−%33</b>']];
+  var outs=[['Besin değeri tablosu (GSO 2233)','ok','Hazır'],['İçindekiler ve alerjen listesi','ok','Hazır'],['Arapça etiket metni','warn','Çeviri bekliyor'],['Tedarikçi belgeleri (COA, helal, teknik föy)','ok','Hazır']];
+  h+='<div class="row"><section class="card main stack"><div><h1 class="disp" style="font-size:28px">Etiket ve besin değeri</h1><p class="muted" style="margin:6px 0 0">Kazanan: Mavi Defne Aroma, numune NS-26-114. Değerler 100 g ürün içindir.</p></div>'+table(['Besin öğesi','Eski reçete','Yeni reçete','Fark'],nut,460)+'<div style="background:#E3F1EC;border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.55;color:#0A4E43"><b>Beyan kontrolü:</b> Tuz %33 azaldı. Referans ürüne göre en az %25 farkla "azaltılmış tuz" beyanı için uygun görünüyor (örnek kural).</div></section>';
+  h+='<aside class="side"><div class="card"><h2 style="font-size:16px;margin-bottom:14px">Ambalaj ön yüz taslağı</h2><div style="border:2px solid #16211C;border-radius:10px;padding:18px;background:#FFF8E8;display:flex;flex-direction:column;gap:10px"><div class="disp" style="font-weight:700;font-size:26px;color:#B23A12">Çıtırca Acılı</div><span class="chip" style="align-self:flex-start;background:#0F6B5C;color:#fff;font-size:14px;padding:6px 12px">%33 daha az tuz</span><div class="small" style="color:#3E4A43">Reduced salt · 33% less salt</div><div class="small" style="color:#3E4A43">Arapça metin: çeviri bekliyor</div></div></div>';
+  h+='<div class="card"><h2 style="font-size:16px;margin-bottom:12px">Çıktılar</h2><ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px;font-size:14px">'+outs.map(function(o){return '<li style="display:flex;justify-content:space-between;gap:10px;align-items:center"><span>'+o[0]+'</span>'+chip(o[1],o[2])+'</li>'}).join('')+'</ul><button type="button" class="btn" style="margin-top:16px;width:100%">Paketi indir (PDF)</button></div></aside></div>';
+ }
+ h+='<p class="note">Tedarikçi adları, ürünler ve sonuçlar uydurma örnek veridir.</p></main>';
+ return '<div style="--acc:#0F6B5C">'+h+'</div>';
+}
+
+/* ---------- VİTRİNOVA ---------- */
+var BR={b1:{title:'Acılı cipste %30 tuz azaltma',buyer:'Çıtırca Gıda',market:'Suudi Arabistan',match:'92',due:'5 Ara',facts:[['Yıllık hacim','~40 ton ürün'],['Tahmini bileşen cirosu','[TAHMİN] $/yıl'],['İstenen numune','2 adet'],['Rakip teklif','2 tedarikçi daha']],text:'Ürün: Cips ve atıştırmalık\nHedef: %30 tuz azaltma, acılık ve tat profili korunacak\nKısıtlar: maliyet artışı en fazla %3, helal belge zorunlu, alerjen listesi değişmeyecek\nİstenen: teknik föy, COA, 21 gün içinde',recs:[['Defne SaltLess 30','Tuz azaltma sistemi; cips uygulamasında %30–35 azalma verisi var','%94 uyum'],['Kırmızı Biber Doğal Aroma','Acılık algısını koruyarak tuz eksikliğini dengeler','%81 uyum']]},
+ b2:{title:'Kakaolu kekte maliyet düşürme',buyer:'Bereket Unlu Mamuller',market:'Irak',match:'78',due:'9 Ara',facts:[['Yıllık hacim','~120 ton ürün'],['Tahmini bileşen cirosu','[TAHMİN] $/yıl'],['İstenen numune','3 adet'],['Rakip teklif','1 tedarikçi daha']],text:'Ürün: Ekmek ve fırın\nHedef: kakao miktarını %20 azaltıp rengi ve tadı korumak\nKısıtlar: helal belge zorunlu, Arapça teknik föy\nİstenen: teknik föy, COA, 30 gün içinde',recs:[['Kakao Notası Aroma Sistemi','Kakao azaltmada tat ve renk desteği','%86 uyum']]},
+ b3:{title:'Peynirli krakerde doğal aroma',buyer:'Altınbaşak Bisküvi',market:'BAE',match:'84',due:'28 Kas',facts:[['Yıllık hacim','~65 ton ürün'],['Tahmini bileşen cirosu','[TAHMİN] $/yıl'],['İstenen numune','2 adet'],['Rakip teklif','3 tedarikçi daha']],text:'Ürün: Atıştırmalık\nHedef: yapay aromadan doğal aromaya geçiş\nKısıtlar: sadece doğal aroma, helal belge\nİstenen: teknik föy, COA',recs:[['Doğal Peynir Aroması','Doğal etiketli, ısıya dayanıklı','%88 uyum']]},
+ b4:{title:'Naneli ayranda doğal aroma',buyer:'Yayla Süt',market:'Türkiye',match:'71',due:'14 Ara',facts:[['Yıllık hacim','~300 ton ürün'],['Tahmini bileşen cirosu','[TAHMİN] $/yıl'],['İstenen numune','1 adet'],['Rakip teklif','2 tedarikçi daha']],text:'Ürün: Hazır içecek\nHedef: naneli ayran için doğal nane aroması\nKısıtlar: alerjen listesi değişmeyecek\nÜreticinin sorusu: pastörizasyonda aroma kaybı ne kadar?',recs:[['Taze Nane Doğal Aroma','Isıl işleme dayanıklılık testi var','%79 uyum']]}};
+var STM={new:['plan','Yeni'],sent:['ok','Numune gönderildi'],question:['warn','Soru bekliyor'],declined:['gray','Uygun değil']};
+var QA=[{q:'Defne SaltLess 30 cipste hangi dozda kullanılır?',tr:'Cips uygulamasında önerilen kullanım, toplam çeşni karışımının %2–3\'ü kadardır. Bu dozda iç testlerde tuzda %30–35 azalma ile tat panelinde fark edilmeyen sonuç alındı.\nKızartma yağı ve baharat yükü dozu etkileyebilir; numune ile deneme önerilir.',en:'Recommended dosage in crisps is 2–3% of the total seasoning blend. At this dose internal trials achieved a 30–35% salt reduction with no difference noticed by the taste panel.\nFrying oil and spice load can shift the dose; a sample trial is recommended.',src:['Teknik föy v3.2','Uygulama notu: cips']},
+ {q:'Ürünün helal sertifikası hangi kuruluştan?',tr:'Ürün, tanınmış bir helal sertifikasyon kuruluşunun belgesine sahiptir. Geçerlilik tarihi ve kuruluş adı belge kasasında görünür; alıcılar indirme izni isteyebilir.',en:'The product holds a certificate from a recognised halal certification body. The expiry date and body name are visible in the document vault; buyers can request download access.',src:['Helal sertifikası (PDF)']},
+ {q:'Alerjen içeriyor mu?',tr:'Ürün, AB ve GSO alerjen listelerindeki maddelerin hiçbirini içermez. Aynı hatta süt ürünü işlenmektedir; çapraz bulaşma beyanı alerjen formunda yer alır.',en:'The product contains none of the allergens listed by the EU and GSO. Dairy is handled on the same line; the cross-contact statement is in the allergen form.',src:['Alerjen beyan formu']},
+ {q:'Minimum sipariş ve teslim süresi nedir?',tr:'Minimum sipariş 25 kg\'dır. Stoklu ürünlerde İstanbul\'dan sevkiyat 5 iş günü, Körfez ülkelerine 12–15 gündür.',en:'Minimum order is 25 kg. Stocked items ship from Istanbul in 5 working days, and to the Gulf in 12–15 days.',src:['Satış koşulları 2026']}];
+function vitrinova(){
+ var v=S.v,h=header('#1C1E4D','B','#5A5FD6','Vitrinova','Bileşenlerinizi talep sahibiyle buluşturun','Mavi Defne Aroma · Satış');
+ var nNew=Object.keys(v.status).filter(function(k){return v.status[k]==='new'}).length;
+ h+=tabs(['Gelen talepler ('+nNew+' yeni)','Katalog','Teknik asistan','Huni ve gelir'],v.tab,'vtab');
+ h+='<main class="wrap">';
+ if(v.tab===0){
+  var d=BR[v.sel],st=STM[v.status[v.sel]];
+  h+='<div class="row"><section style="flex:1 1 360px;min-width:0" class="stack" ><div><h1 class="disp" style="font-size:26px">Gelen talepler</h1><p class="muted small" style="margin:6px 0 0">Reçetra kullanan üreticilerden, portföyünüze uyan brief\'ler.</p></div>';
+  h+=Object.keys(BR).map(function(id){var b=BR[id],s=STM[v.status[id]];return '<button type="button" class="choice'+(v.sel===id?' sel':'')+'" aria-pressed="'+(v.sel===id)+'" data-a="vsel" data-v="'+id+'"><span style="display:flex;justify-content:space-between;gap:10px;width:100%"><b style="font-size:15px">'+b.title+'</b><span class="disp" style="font-weight:700;color:#3B3FA8">'+b.match+'</span></span><span class="muted small">'+b.buyer+' · '+b.market+'</span><span style="display:flex;justify-content:space-between;width:100%">'+chip(s[0],s[1])+'<span class="small muted">Son gün: '+b.due+'</span></span></button>'}).join('');
+  h+='</section><section class="card main stack" style="gap:20px"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px"><div><div class="small muted">'+d.buyer+' · '+d.market+'</div><h2 class="disp" style="font-size:24px;margin-top:4px">'+d.title+'</h2></div>'+chip(st[0],st[1])+'</div>';
+  h+='<div class="kpis">'+d.facts.map(function(f){return '<div style="flex:1 1 150px;background:#F4F4F8;border-radius:10px;padding:12px 14px"><div class="small muted">'+f[0]+'</div><div style="font-weight:700;margin-top:2px">'+f[1]+'</div></div>'}).join('')+'</div>';
+  h+='<div><h3 style="font-size:15px;margin-bottom:8px">Brief</h3><p class="pre" style="margin:0">'+esc(d.text)+'</p></div>';
+  h+='<div><h3 style="font-size:15px;margin-bottom:10px">Önerilen ürünleriniz</h3><div class="stack" style="gap:8px">'+d.recs.map(function(r){return '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;border:1px solid #DEDFEA;border-radius:10px;padding:12px 14px"><div><div style="font-weight:600">'+r[0]+'</div><div class="small muted">'+r[1]+'</div></div><span class="small" style="font-weight:600;color:#3B3FA8;align-self:center">'+r[2]+'</span></div>'}).join('')+'</div></div>';
+  h+='<div class="pills"><button type="button" class="btn" data-a="vsend">'+(v.status[v.sel]==='sent'?'Numune yolda':'Numune gönder')+'</button><button type="button" class="btn ghost">Üreticiye soru sor</button><button type="button" class="btn ghost" style="color:#8A2A2A" data-a="vdecline">Uygun değil</button></div></section></div>';
+ }
+ if(v.tab===1){
+  var P=[['Tuz azaltma','Defne SaltLess 30','Cips, kraker ve çeşni karışımları için tuz azaltma sistemi.',[['Teknik föy TR/EN/AR',1],['COA',1],['Helal',1],['Alerjen',1]],'1.240','18'],['Aroma','Kırmızı Biber Doğal Aroma','Acılık algısı veren, ısıya dayanıklı doğal aroma.',[['Teknik föy TR/EN',1],['COA',1],['Helal',1],['Arapça föy eksik',0]],'860','11'],['Aroma','Doğal Peynir Aroması','Kraker ve fırın ürünleri için doğal etiketli peynir notası.',[['Teknik föy TR/EN/AR',1],['COA',1],['Helal',1],['Alerjen',1]],'640','7'],['Çeşni','Sumak-Nar Çeşnisi','Körfez damak tadına uygun ekşi-tuzlu çeşni.',[['Teknik föy TR',1],['COA',1],['Helal yenileniyor',0],['Alerjen',1]],'410','4']];
+  h+='<div class="stack"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end"><div><h1 class="disp" style="font-size:28px">Katalog</h1><p class="muted" style="margin:6px 0 0">Her ürün Türkçe, İngilizce ve Arapça teknik föy ve belgelerle yayında.</p></div><button type="button" class="btn">+ Ürün ekle</button></div><div class="grid">';
+  h+=P.map(function(p){return '<div class="card stack" style="padding:20px;gap:12px"><div class="small" style="font-weight:600;color:#3B3FA8;letter-spacing:.06em">'+p[0].toUpperCase()+'</div><div style="font-weight:700;font-size:17px">'+p[1]+'</div><div style="font-size:14px;line-height:1.5;color:#3E4160">'+p[2]+'</div><div class="pills">'+p[3].map(function(d){return chip(d[1]?'ok':'warn',d[0])}).join('')+'</div><div class="small muted" style="display:flex;justify-content:space-between;border-top:1px solid #EEEFF5;padding-top:10px"><span>'+p[4]+' görüntülenme</span><span>'+p[5]+' numune talebi</span></div></div>'}).join('')+'</div></div>';
+ }
+ if(v.tab===2){
+  var q=QA[v.q];
+  h+='<div class="row"><section class="card stack" style="flex:1 1 360px;min-width:0"><h1 class="disp" style="font-size:24px">Teknik asistan</h1><p class="muted small" style="margin:0;line-height:1.5">Alıcılar vitrininizde 7/24 soru sorar; asistan yalnızca sizin belgelerinizden yanıt verir. Örnek sorular:</p>';
+  h+=QA.map(function(x,i){return '<button type="button" class="choice'+(v.q===i?' sel':'')+'" aria-pressed="'+(v.q===i)+'" data-a="vq" data-v="'+i+'">'+x.q+'</button>'}).join('');
+  h+='<div><div style="font-weight:600;font-size:14px;margin-bottom:8px">Yanıt dili</div>'+pills(['Türkçe','English'],v.lang==='TR'?'Türkçe':'English','vlang')+'</div></section>';
+  h+='<section class="card main stack"><div style="align-self:flex-end;max-width:80%;background:#3B3FA8;color:#fff;border-radius:14px 14px 4px 14px;padding:12px 16px;line-height:1.5">'+q.q+'</div><div class="pre" style="max-width:88%;background:#F4F4F8;border-radius:14px 14px 14px 4px;padding:16px 18px">'+esc(v.lang==='TR'?q.tr:q.en)+'</div><div class="small muted" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">Kaynak: '+q.src.map(function(s){return chip('plan',s)}).join('')+'</div><div class="pills" style="border-top:1px solid #EEEFF5;padding-top:14px"><button type="button" class="btn" data-a="vtab" data-v="0">Numune teklif et</button><button type="button" class="btn ghost">Satış temsilcisine aktar</button></div></section></div>';
+ }
+ if(v.tab===3){
+  var F=[['Gelen talep',48],['Kabul edilen',31],['Numune gönderilen',22],['Üretici onayı',9],['Sipariş',6]];
+  h+='<div class="row"><section class="card main stack"><div><h1 class="disp" style="font-size:28px">Talepten siparişe</h1><p class="muted" style="margin:6px 0 0">Son 90 gün · Vitrinova üzerinden gelen tüm talepler.</p></div>';
+  h+=F.map(function(f){return '<div style="display:grid;grid-template-columns:160px minmax(0,1fr) 60px;gap:14px;align-items:center"><b style="font-size:14px">'+f[0]+'</b><span class="bar" style="height:28px;border-radius:6px"><span style="width:'+Math.round(f[1]/48*100)+'%;border-radius:6px"></span></span><span class="disp" style="font-weight:700;font-size:18px;text-align:right">'+f[1]+'</span></div>'}).join('');
+  h+='<p style="margin:0;font-size:14px;color:#3E4160">Talepten siparişe dönüşüm: <b>%12,5</b>. En çok kayıp numune ile onay arasında; teknik asistanın yanıt süresi burada belirleyici.</p></section>';
+  h+='<aside class="side"><div class="card"><h2 style="font-size:16px;margin-bottom:12px">Kazanılan siparişler</h2>'+[['Altınbaşak Bisküvi · doğal peynir'],['Sahra Snacks · sumak-nar'],['Çıtırca Gıda · biber aroması']].map(function(w){return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:6px 0"><span>'+w[0]+'</span><b>[TUTAR]</b></div>'}).join('')+'</div><div class="card" style="background:#1C1E4D;color:#F1F1FA;border:0"><div class="small" style="opacity:.8">Planınız</div><div class="disp" style="font-weight:700;font-size:22px;margin:4px 0">Büyüme</div><div style="font-size:14px;line-height:1.5;opacity:.9">Ayda 60 nitelikli talep, 3 dil, 25 ürün. Fiyat: [YILLIK ÜCRET].</div></div></aside></div>';
+ }
+ h+='<p class="note">Marka, firma ve rakamlar uydurma örnek veridir.</p></main>';
+ return '<div style="--acc:#3B3FA8;background:#F4F4F8;min-height:100vh">'+h+'</div>';
+}
+
+/* ---------- KÖKPAS ---------- */
+var GAPS=[{id:'smeta',title:'Sosyal denetim (SMETA 4 sütun)',why:'Küresel bileşen şirketleri ve AB marketleri, sezonluk işçi çalıştıran tedarikçilerden bağımsız sosyal denetim istiyor.',effort:'6–8 hafta',help:'denetçi eşleştirme, hazırlık listesi',pts:10,w:[10,12,8]},
+ {id:'carbon',title:'Ürün karbon ayak izi',why:'Alıcılar kendi Scope 3 hedefleri için ton başı emisyon verisi soruyor.',effort:'3 hafta',help:'hazır hesap şablonu, enerji ve gübre verisinden',pts:8,w:[9,8,6]},
+ {id:'gps',title:'Kalan 46 bahçenin GPS kaydı',why:'Bahçe düzeyinde izlenebilirlik, fındıkta en sık istenen kanıt.',effort:'2 hafta',help:'telefonla saha uygulaması',pts:6,w:[6,7,5]},
+ {id:'dds',title:'Kakao lotlarının DDS referansları',why:'AB\'ye kakaolu ürün satışı için her lotta tedarikçinin beyan referansı gerekiyor.',effort:'1 hafta',help:'tedarikçiye otomatik talep e-postası',pts:4,w:[2,5,9]}];
+function kokpas(){
+ var k=S.k,h=header('#3A220B','C','#C27A2C','Kökpas','Bir kez doldur, tüm büyük alıcılarla paylaş','Yeşilyaka Gıda · İhracat');
+ h+=tabs(['Hazırlık skoru','Belge kasası','Köken ve EUDR','Alıcı talepleri'],k.tab,'ktab');
+ h+='<main class="wrap">';
+ if(k.tab===0){
+  var score=72,bs=[76,64,69];
+  GAPS.forEach(function(g){if(k.done[g.id]){score+=g.pts;g.w.forEach(function(w,i){bs[i]+=w})}});
+  score=Math.min(score,100);
+  h+='<div class="row"><section class="side" style="flex:1 1 380px"><div class="card stack" style="gap:12px"><div class="small muted">Genel alıcı hazırlık skoru</div><div><span class="disp" style="font-weight:700;font-size:64px;line-height:1;color:#8A4B0F">'+score+'</span> <span class="muted" style="font-size:18px">/ 100</span></div><span class="bar" style="height:12px"><span style="width:'+score+'%"></span></span><p style="margin:0;font-size:14px;line-height:1.5;color:#4A3D2F">'+(score>=85?'Büyük alıcıların çoğunun tedarikçi onay sürecine girmeye hazırsınız.':'Onay sürecine girebilirsiniz, ama sağdaki eksikler alıcıların elemesinde en sık takılan noktalar.')+'</p></div>';
+  h+='<div class="card stack" style="gap:14px"><h2 style="font-size:16px">Alıcı tipine göre hazırlık</h2>'+['Küresel tat ve bileşen şirketi','AB market zinciri (özel marka)','Avrupalı çikolata üreticisi'].map(function(n,i){var x=Math.min(bs[i],100);return '<div><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px"><span>'+n+'</span><b>'+x+'</b></div><span class="bar" style="height:8px"><span style="width:'+x+'%"></span></span></div>'}).join('')+'</div></section>';
+  h+='<section class="card main stack"><div><h1 class="disp" style="font-size:28px">Skoru yükseltmek için</h1><p class="muted" style="margin:6px 0 0">Eksikler, alıcıların en sık sorduğu konulara göre sıralandı. Tamamladıkça skor güncellenir.</p></div>';
+  h+=GAPS.map(function(g){var on=!!k.done[g.id];return '<div style="border:1px solid '+(on?'#B8DCCD':'#E6DED3')+';background:'+(on?'#F1F8F4':'#fff')+';border-radius:12px;padding:16px 18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px"><div style="flex:1 1 300px;min-width:0"><div style="font-weight:700;font-size:16px">'+g.title+'</div><div style="font-size:14px;color:#4A3D2F;margin-top:4px;line-height:1.5">'+g.why+'</div><div class="small muted" style="margin-top:6px">Tahmini süre: '+g.effort+' · Kökpas desteği: '+g.help+'</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><span class="disp" style="font-weight:700;color:#8A4B0F">+'+g.pts+' puan</span><button type="button" class="'+(on?'btn':'btn ghost')+'" style="'+(on?'background:#0F6B5C':'color:#8A4B0F;border-color:#8A4B0F')+';font-size:13px" aria-pressed="'+on+'" data-a="kdone" data-v="'+g.id+'">'+(on?'Tamamlandı':'Tamamlandı say')+'</button></div></div>'}).join('');
+  h+='</section></div>';
+ }
+ if(k.tab===1){
+  var D=[['FSSC 22000 sertifikası','Gıda güvenliği','ok','Geçerli','Mart 2027','3/3'],['Helal sertifikası','Tüm ürünler','ok','Geçerli','Ağustos 2027','2/3'],['Alerjen beyan formu','Tüm ürünler','ok','Geçerli','–','3/3'],['Analiz sertifikası şablonu (COA)','Lot bazında','warn','Süresi yaklaşıyor','Ocak 2027','3/3'],['Aflatoksin analiz raporu','Fındık lotları','warn','Süresi yaklaşıyor','Aralık 2026','3/3'],['SMETA sosyal denetim','Tesis ve bahçeler','plan','Planlandı','–','2/3'],['Karbon ayak izi raporu','Ton ürün başı','miss','Eksik','–','2/3'],['Tedarikçi davranış kuralları onayı','Alıcıya özel','ok','İmzalı','–','1/3']];
+  var FM={'Tümü':null,'Geçerli':['ok'],'Süresi yaklaşan':['warn'],'Eksik veya planlı':['miss','plan']},al=FM[k.filter];
+  h+='<section class="card stack"><div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-end"><div><h1 class="disp" style="font-size:28px">Belge kasası</h1><p class="muted" style="margin:6px 0 0">Süresi yaklaşan belgeler için 60 gün önceden uyarı gelir.</p></div><button type="button" class="btn">+ Belge yükle</button></div>'+pills(Object.keys(FM),k.filter,'kfilter');
+  h+=table(['Belge','Kapsam','Durum','Geçerlilik','Kaç alıcı istiyor'],D.filter(function(d){return !al||al.indexOf(d[2])>=0}).map(function(d){return ['<b>'+d[0]+'</b>',d[1],chip(d[2],d[3]),d[4],d[5]]}))+'</section>';
+ }
+ if(k.tab===2){
+  var gpsDone=!!k.done.gps,ddsDone=!!k.done.dds;
+  h+='<div class="stack">'+kpis([['Kayıtlı fındık bahçesi','214','Ordu ve Giresun'],['GPS kaydı tamam',gpsDone?'214':'168',gpsDone?'%100':'%79'],['Sezonluk işçi kaydı','1.020 kişi','2026 hasadı'],['DDS referanslı kakao lotu',ddsDone?'3 / 3':'1 / 3','AB satışları için']]);
+  var farms=[['FB-0112','Ünye','ok','ok'],['FB-0113','Ünye','ok','ok'],['FB-0187','Fatsa','miss','ok'],['FB-0201','Bulancak','ok','warn'],['FB-0209','Bulancak','miss','warn']];
+  var lots=[['KK-26-031','Kakao tozu · Batı Afrika kaynaklı, ithalatçı üzerinden','ok'],['KK-26-034','Kakao kitlesi · Latin Amerika kaynaklı','miss'],['KK-26-040','Kakao tozu · Batı Afrika kaynaklı','miss']];
+  h+='<div class="row"><div class="card stack" style="flex:1 1 520px;min-width:0;gap:12px"><h2 style="font-size:18px">Fındık bahçeleri</h2><p style="margin:0;font-size:14px;line-height:1.5;color:#4A3D2F">Fındık EUDR kapsamında değil; ancak büyük alıcılar bahçe düzeyinde izlenebilirlik ve sezonluk işçi koşulları için durum tespiti istiyor.</p>'+table(['Bahçe','İlçe','GPS','İşçi kaydı'],farms.map(function(f){var g=gpsDone?'ok':f[2];return ['<code>'+f[0]+'</code>',f[1],chip(g,g==='ok'?'Kayıtlı':'Eksik'),chip(f[3],f[3]==='ok'?'Tam':'Kısmi')]}),440)+'</div>';
+  h+='<div class="card stack" style="flex:1 1 420px;min-width:0;gap:12px"><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><h2 style="font-size:18px">Kakao girdileri</h2>'+chip('warn','EUDR kapsamında')+'</div><p style="margin:0;font-size:14px;line-height:1.5;color:#4A3D2F">Kakaolu fındık ezmesi AB\'ye satıldığında, kakao tedarikçisinin durum tespiti beyanı (DDS) referansı her lotta tutulmalı. Büyük operatörler için başlangıç: 30 Aralık 2026.</p>'+lots.map(function(l){var s=ddsDone?'ok':l[2];return '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;border:1px solid #E6DED3;border-radius:10px;padding:12px 14px;font-size:14px"><div><code style="font-weight:600">'+l[0]+'</code><div class="small muted">'+l[1]+'</div></div>'+chip(s,s==='ok'?'DDS referansı var':'Referans bekleniyor')+'</div>'}).join('')+'</div></div></div>';
+ }
+ if(k.tab===3){
+  var R=[['r1','Küresel tat ve bileşen şirketi','Tedarikçi onay anketi',86,'2 Ara',81],['r2','AB market zinciri (özel marka)','Sosyal uygunluk ve izlenebilirlik',54,'10 Ara',74],['r3','Avrupalı çikolata üreticisi','EUDR ve karbon veri talebi',32,'18 Ara',63]];
+  h+='<section class="card stack"><div><h1 class="disp" style="font-size:28px">Alıcı talepleri</h1><p class="muted" style="margin:6px 0 0">Gelen tedarikçi anketleri pasaporttaki bilgilerle otomatik doldurulur; siz yalnızca eksikleri onaylarsınız.</p></div>';
+  h+=R.map(function(r){var on=!!k.shared[r[0]],left=Math.round(r[3]*(100-r[5])/100);return '<div style="border:1px solid #E6DED3;border-radius:12px;padding:18px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between"><div style="flex:1 1 320px;min-width:0"><div style="font-weight:700;font-size:16px">'+r[1]+'</div><div style="font-size:14px;color:#4A3D2F;margin-top:4px">'+r[2]+' · '+r[3]+' soru · son gün '+r[4]+'</div><span class="bar" style="height:8px;margin-top:10px;max-width:420px"><span style="width:'+r[5]+'%"></span></span><div class="small muted" style="margin-top:6px">%'+r[5]+' otomatik dolduruldu · '+left+' soru sizi bekliyor</div></div><div class="pills"><button type="button" class="btn ghost">Taslağı incele</button><button type="button" class="btn" style="'+(on?'background:#0F6B5C':'')+'" aria-pressed="'+on+'" data-a="kshare" data-v="'+r[0]+'">'+(on?'Pasaport paylaşıldı':'Pasaportu paylaş')+'</button></div></div>'}).join('')+'</section>';
+ }
+ h+='<p class="note">Marka, firma, belge ve rakamlar uydurma örnek veridir; uyum kuralları uzman onayıyla kurulacak.</p></main>';
+ return '<div style="--acc:#8A4B0F;background:#F7F4EF;min-height:100vh">'+h+'</div>';
+}
+
+function render(){
+ document.getElementById('topnav').innerHTML='<span class="brand disp">Örnek prototip</span>'+VIEWS.map(function(x){return '<button type="button" class="navlink" aria-current="'+(S.view===x[0]?'page':'false')+'" data-a="go" data-v="'+x[0]+'">'+x[1]+'</button>'}).join('');
+ var f={genel:genel,recetra:recetra,vitrinova:vitrinova,kokpas:kokpas}[S.view];
+ document.getElementById('app').innerHTML=f();
+}
+function setView(v,push){if(!{genel:1,recetra:1,vitrinova:1,kokpas:1}[v])v='genel';S.view=v;if(push&&location.hash!=='#'+v){try{location.hash=v}catch(e){}}render();window.scrollTo(0,0)}
+document.addEventListener('click',function(e){
+ var t=e.target.closest('[data-a]');if(!t)return;var a=t.getAttribute('data-a'),v=t.getAttribute('data-v');
+ var r=S.r,vv=S.v,k=S.k;
+ switch(a){
+  case 'go':setView(v,true);return;
+  case 'rtab':r.tab=Number(v);break;
+  case 'rcat':r.cat=v;break;case 'rgoal':r.goal=v;break;case 'rcountry':r.country=v;break;
+  case 'rpick':r.picked[v]=!r.picked[v];r.sent=false;break;
+  case 'rsend':r.sent=Object.keys(r.picked).some(function(x){return r.picked[x]});r.tab=3;break;
+  case 'vtab':vv.tab=Number(v);break;case 'vsel':vv.sel=v;break;
+  case 'vsend':vv.status[vv.sel]='sent';break;case 'vdecline':vv.status[vv.sel]='declined';break;
+  case 'vq':vv.q=Number(v);break;case 'vlang':vv.lang=v==='Türkçe'?'TR':'EN';break;
+  case 'ktab':k.tab=Number(v);break;case 'kdone':k.done[v]=!k.done[v];break;
+  case 'kfilter':k.filter=v;break;case 'kshare':k.shared[v]=!k.shared[v];break;
+  default:return;
+ }
+ render();
+});
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='pct'){S.r.pct=Number(e.target.value);render();var el=document.getElementById('pct');if(el)el.focus()}});
+window.addEventListener('hashchange',function(){setView(location.hash.replace('#',''),false)});
+setView((location.hash||'#genel').replace('#',''),false);
+})();
+</script>
+</body>
+</html>
